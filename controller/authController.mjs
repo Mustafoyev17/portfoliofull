@@ -48,9 +48,35 @@ export const login_post = (req, res) => {
 };
 
 
-export const port_get = (req, res) => {
-    res.render('port');
+export const portfolio_get = (req, res) => {
+    res.render('portfolio');
+};
+export const portfolio_post = (req, res) => {
+    res.render('portfolio');
+};
+export const career_get = (req, res) => {
+    res.render('career');
+};
+export const career_post = (req, res) => {
+    res.render('career');
+};
 
-};export const port_post = (req, res) => {
-    res.render('port');
+export const home_get = (req, res) => {
+    res.render('home');
+};
+export const home_post = (req, res) => {
+    res.render('home');
+};
+export const pricing_get = (req, res) => {
+    res.render('pricing');
+};
+export const pricing_post = (req, res) => {
+    res.render('pricing');
+};
+
+export const glovery_get = (req, res) => {
+    res.render('glovery');
+};
+export const glovery_post = (req, res) => {
+    res.render('glovery');
 };
