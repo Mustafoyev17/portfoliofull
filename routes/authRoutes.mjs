@@ -15,6 +15,7 @@ import
     glovery_post, 
     career_get, 
     career_post,
+    logout_get,
 
 } 
 from '../controller/authController.mjs'
@@ -35,5 +36,6 @@ router.get('/pricing', pricing_get)
 router.post('/pricing', pricing_post)
 router.get('/glovery', glovery_get)
 router.post('/glovery', glovery_post)
+router.get('/logout', login_get)
 
 export default router

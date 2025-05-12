@@ -310,6 +310,7 @@ body {
 }
 
         </style>
+        <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/css/styles.css">
@@ -324,14 +325,33 @@ body {
 <body>
     <!-- Main Navigation -->
 <nav class="main-nav" id="main-nav">
-    <div class="content-wrapper-sm">
-     <a href="/home" class="navbar-brand"><span>EVEREST </span><span style="color: rgb(255, 200, 110);">EVOLUTION</span></a>
-     <div id="menu-button">
+  <div class="content-wrapper-sm">
+    <a href="/home" class="navbar-brand">
+      <span>EVEREST </span><span style="color: rgb(255, 200, 110);">EVOLUTION</span>
+    </a>
+    <div id="menu-button">
       <div class="bar1"></div>
       <div class="bar2"></div>
       <div class="bar3"></div>
-     </div>
-     <ul class="nav-links">
+    </div>
+
+    <ul class="nav-links" id="nav-links">
+      <!-- Dastlab bo‘sh qoldiramiz, JavaScript orqali to‘ldiriladi -->
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const user = JSON.parse(localStorage.getItem('user'));
+  const navLinks = document.getElementById('nav-links');
+
+  if (user) {
+    navLinks.innerHTML = `
+      <li>Welcome, ${user.email}</li>
+      <li><a href="/logout">LOG OUT</a></li>
+    `;
+  } else {
+    navLinks.innerHTML = `
       <li><a href="#about">About</a></li>
       <li><a href="#reserve">Reservation</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -339,8 +359,12 @@ body {
       <li><a href="/career">Careers</a></li>
       <li><a href="/portfolio">Portfolio</a></li>
       <li><a href="/pricing">Price</a></li>
-      <li><a class="button" href="/signup">SIGNUP</a></li>
-      <li><a class="button" href="/login">LOGIN</a></li>
+      <li><a href="/signup">SIGNUP</a></li>
+      <li><a href="/login">LOGIN</a></li>
+    `;
+  }
+</script>
+
      </ul>
     </div>
    </nav>
@@ -377,6 +401,7 @@ body {
      <a href="https://github.com/Mustafoyev17/portfoliofull" class="btn btn-outline-purple" target="_blank">Download</a>
     </div>
    
+
     <div class="content-wrapper" id="contact">
      <!-- Third replaceble image -->
      <img class="img-absolute" src="https://raw.githubusercontent.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/img/city3.png" alt="City 3">

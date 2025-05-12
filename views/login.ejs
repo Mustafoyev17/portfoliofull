@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="style.css">
    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <title>Signup page</title>
+    <title>Login page</title>
 </head>
 <style>
 
@@ -191,27 +191,26 @@
      </ul>
     </div>
    </nav>
-
+   
   <div class="wrapper">
     <section>
       <div class="form-box">
         <div class="form-value">
-          <form action="">
+          <form>
             <h2>Login</h2>
             <div class="inputbox">
               <ion-icon name="mail-outline"></ion-icon>
-              <input type="email" required>
+              <input type="email" name="email" required>
+              <div class="email error" style="color: red;"></div>
               <label for="">Email</label>
             </div>
             <div class="inputbox">
               <ion-icon name="lock-closed-outline"></ion-icon>
-              <input type="password" required>
+              <input type="password" name="password" required>
+              <div class="password error" style="color: red;"></div>
               <label for="">Password</label>
             </div>
             <div class="forget">
-              <label>
-                <input type="checkbox"> Remember me
-              </label>
               <label>
                 <a href="#">Forgot password?</a>
               </label>
@@ -228,13 +227,39 @@
 
   <script>
     const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
+    const emailError = document.querySelector('.email.error');
+    const passwordError = document.querySelector('.password.error');
+
+    form.addEventListener('submit', async(e) => {
       e.preventDefault();
+
+      emailError.textContent = "";
+      passwordError.textContent = "";
 
       const email = form.email.value;
       const password = form.password.value;
 
-      console.log({ email, password });
+    
+            try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        console.log(data);
+        if(data.errors) {
+          emailError.textContent = data.errors.email;
+          passwordError.textContent = data.errors.password;
+        }
+         if(data.user) {
+          location.assign('/home');
+         }
+        } catch (err) {
+          console.log(err);
+        }
+
+
     });
   </script>
 
