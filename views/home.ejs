@@ -324,47 +324,22 @@ body {
 </head>
 <body>
     <!-- Main Navigation -->
-<nav class="main-nav" id="main-nav">
-  <div class="content-wrapper-sm">
-    <a href="/home" class="navbar-brand">
-      <span>EVEREST </span><span style="color: rgb(255, 200, 110);">EVOLUTION</span>
-    </a>
-    <div id="menu-button">
+  <nav class="main-nav" id="main-nav">
+    <div class="content-wrapper-sm">
+     <a href="#" class="navbar-brand"><span>EVEREST </span><span style="color: rgb( 255, 200, 110);">EVOLUTION</span></a>
+     <div id="menu-button">
       <div class="bar1"></div>
       <div class="bar2"></div>
       <div class="bar3"></div>
-    </div>
-
-    <ul class="nav-links" id="nav-links">
-      <!-- Dastlab bo‘sh qoldiramiz, JavaScript orqali to‘ldiriladi -->
-    </ul>
-  </div>
-</nav>
-
-<script>
-  const user = JSON.parse(localStorage.getItem('user'));
-  const navLinks = document.getElementById('nav-links');
-
-  if (user) {
-    navLinks.innerHTML = `
-      <li>Welcome, ${user.email}</li>
-      <li><a href="/logout">LOG OUT</a></li>
-    `;
-  } else {
-    navLinks.innerHTML = `
-      <li><a href="#about">About</a></li>
-      <li><a href="#reserve">Reservation</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="/glovery">Glovery</a></li>
-      <li><a href="/career">Careers</a></li>
-      <li><a href="/portfolio">Portfolio</a></li>
-      <li><a href="/pricing">Price</a></li>
-      <li><a href="/signup">SIGNUP</a></li>
-      <li><a href="/login">LOGIN</a></li>
-    `;
-  }
-</script>
-
+     </div>
+     <ul class="nav-links">
+      <li><a href="/home">HOME</a></li>
+      <li><a href="/career">CAREERS</a></li>
+      <li><a href="/portfolio">PORTFOLIO</a></li>
+      <li><a href="/glovery">GLOVERY</a></li>
+      <li><a href="/pricing">PRICING</a></li>
+      <li><a class="button" href="/signup">SIGNUP</a></li>
+      <li><a class="button" href="/login">LOGIN</a></li>
      </ul>
     </div>
    </nav>
