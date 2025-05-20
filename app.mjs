@@ -23,8 +23,8 @@ const __dirname = path.dirname(__filename);
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => console.log("✅ MongoDB ulandi"))
-  .catch(err => console.error("❌ MongoDB xatolik:", err));
+}).then(() => console.log("MongoDB connected ✅"))
+  .catch(err => console.error("❌ MongoDB error", err));
 
 // Middleware
 app.use(express.static('public'));
@@ -54,7 +54,7 @@ app.get('/chatbot', async (req, res) => {
     const messages = await Chat.find().sort({ createdAt: 1 });
     res.render('chatbot', { messages, aiResponse: null });
   } catch (error) {
-    console.error("❌ Chatni yuklashda xatolik:", error);
+    console.error("Error loading chat", error);
     res.render('chatbot', { messages: [], aiResponse: null });
   }
 });
@@ -81,7 +81,7 @@ app.post('/ask-chat', async (req, res) => {
     res.render('chatbot', { messages, aiResponse: aiReply });
   } catch (error) {
     console.error("ChatGPT xatosi:", error);
-    res.render('chatbot', { messages: [], aiResponse: "AI bilan bog‘lanishda xatolik yuz berdi." });
+    res.render('chatbot', { messages: [], aiResponse: "There was an error connecting to the AI" });
   }
 });
 
@@ -91,14 +91,14 @@ app.post('/clear-chat', async (req, res) => {
     await Chat.deleteMany({});
     res.redirect('/chatbot');
   } catch (error) {
-    console.error("Yozishmalarni o‘chirishda xatolik:", error);
+    console.error("Error deleting correspondence", error);
     res.redirect('/chatbot');
   }
 });
 
 // 📩 E-mail orqali xabar yuborish
 app.post('/send-message', async (req, res) => {
-  const { name, email, phone, message } = req.body;
+  const { name, location, email, phone, message } = req.body;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -115,6 +115,7 @@ app.post('/send-message', async (req, res) => {
     html: `
       <h1>New message:</h1>
       <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Location:</strong> ${location}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone}</p>
       <p><strong>Message:</strong> ${message}</p>
@@ -125,12 +126,11 @@ app.post('/send-message', async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.redirect(req.headers.referer);
   } catch (err) {
-    console.error('Email xatosi:', err);
+    console.error('Email error', err);
     res.redirect(req.headers.referer);
   }
 });
 
-// Foydalanuvchi kirgandan keyingi sahifa
 app.get('/home', requireAuth, (req, res) => {
   res.render('home');
 });
@@ -138,5 +138,5 @@ app.get('/home', requireAuth, (req, res) => {
 // 🚀 Serverni ishga tushurish
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server ${PORT}-portda ishga tushdi`);
+    console.log(`Server running on port ${PORT} 🚀`);
 });

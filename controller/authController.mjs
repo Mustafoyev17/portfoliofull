@@ -101,11 +101,11 @@ export const pricing_post = (req, res) => {
 // Misol uchun
 export const chatbot_get = async (req, res) => {
   try {
-    const messages = await Chat.find().sort({ createdAt: 1 }); // chatModel'dan xabarlarni olish
-    res.render('chatbot', { messages, aiResponse: null }); // EJS faylga `messages` yuborilyapti
+    const messages = await Chat.find().sort({ createdAt: 1 });
+    res.render('chatbot', { messages, aiResponse: null });
   } catch (error) {
-    console.error("❌ Chatbot sahifasini yuklashda xatolik:", error);
-    res.render('chatbot', { messages: [], aiResponse: null }); // Fallback bo‘lishi uchun bo‘sh massiv yuboramiz
+    console.error("Error loading chatbot page ❌", error);
+    res.render('chatbot', { messages: [], aiResponse: null });
   }
 };
 

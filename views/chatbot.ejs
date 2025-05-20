@@ -6,9 +6,16 @@
     <link rel="stylesheet" href="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/css/styles.css">
   <title>Chatbot - Everest Evolution</title>
   <style>
+body {
+  margin: 0;
+  padding: 0;
+  overflow-y: scroll;
+  font-family: sans-serif;
+}
+
     :root {
       --bg-color: #ffffff;
-      --text-color: #222;
+      --text-color: #000000;
       --chatgptextcolor: rgb(50, 200, 255);
       --everest-color: rgb(50, 200, 255);
       --evolution-color: rgb(255, 150, 0);
@@ -20,7 +27,7 @@
 
     [data-theme="dark"] {
       --bg-color: #1b1b1b;
-      --text-color: #f0f0f0;
+      --text-color: #ffffff;
       --chatgptextcolor: rgb(255, 150, 0);
       --everest-color: rgb(255, 150, 0);
       --evolution-color: rgb(50, 200, 255);
@@ -41,21 +48,82 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    .CHATGPTtext{
+    .CHATGPTtext {
       font-family: cursive;
       color: var(--chatgptextcolor);
     }
 
-    .everest{
+#chat-history {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-bottom: 160px;
+}
+
+
+.chat-input-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-color);
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.chatmsg,
+.chatmsg textarea,
+.chatmsg button {
+  width: 100%;
+}
+
+.chatmsg {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chatmsg textarea {
+  flex: 1;
+  min-height: 40px;
+  resize: none;
+  border-radius: 8px;
+  padding: 10px;
+  border: none;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+.chatmsg button,
+.clear-button {
+  background-color: var(--button-color);
+  color: var(--card-bg);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.clear-button {
+  width: 100%;
+}
+
+
+    .everest {
       color: var(--everest-color);
     }
-    .evolution{
+
+    .evolution {
       color: var(--evolution-color);
     }
 
     .theme-toggle {
       position: fixed;
-      top: 34px;
+      top: 30px;
       right: 20px;
       background: none;
       border: none;
@@ -86,6 +154,7 @@
       border: none;
       border-radius: 8px;
       background: var(--card-bg);
+      box-shadow: 0 4px 8px var(--card-shadow);
       color: var(--text-color);
       resize: none;
       font-size: 16px;
@@ -104,6 +173,7 @@
     .ai-response {
       max-width: 750px;
       margin: 100px auto;
+      padding-top: -150px;
       padding: 20px;
       background: var(--card-bg);
       border-radius: 12px;
@@ -115,17 +185,28 @@
       
     .theme-toggle {
       position: fixed;
-      top: 138px;
-      right: 6px;
+      top: 86px;
+      right: 23px;
       background: none;
       border: none;
       cursor: pointer;
     }
     }
+
   </style>
 </head>
-<body>
+<script>
+  // Scroll to bottom function
+  function scrollToBottom() {
+    const chatHistory = document.getElementById('chat-history');
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+  }
 
+  // Har safar sahifa yuklanganda yoki yangi xabar kelganda chaqiriladi
+  window.onload = scrollToBottom;
+</script>
+
+<body>
 
     <nav class="main-nav" id="main-nav">
         <div class="content-wrapper-sm">
@@ -149,39 +230,34 @@
         </div>
        </nav>
 
-
-
   <h1 class="CHATGPTtext">E•E Gpt bilan suhbat</h1>
 
-  <div id="chat-history" style="display: flex; justify-content: center; align-items: center; flex-direction: column; max-width: 750px;">
+<div class="ai-response" id="chat-history" style="display: flex; justify-content: center; align-items: center; flex-direction: column; max-width: 750px;">
   <% if (messages && messages.length > 0) { %>
     <% messages.forEach(msg => { %>
-      <div style="margin-bottom: 10px;">
-        <p><strong>Siz:</strong> <%= msg.user %></p>
-        <p><strong>AI:</strong> <%= msg.ai %></p>
-        <hr>
+      <div style="margin-bottom: 10px; background: var(--card-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px var(--card-shadow); width: 100%;">
+        <p style="display: flex; justify-content: end;"><strong>👤</strong><%= msg.user %></p><br>
+        <p><strong>🤖</strong><%= msg.ai %></p>
       </div>
     <% }) %>
   <% } else { %>
-    <p></p>
+    <p><h4>No message yet</h4></p>
   <% } %>
 </div>
 
-
-
-  <% if (typeof aiResponse !== 'undefined' && aiResponse) { %>
-    <div class="ai-response">
-      <p><%= aiResponse %></p>
-    </div>
-  <% } %>
-
+<!-- CHAT FORM WRAPPER START -->
+<div class="chat-input-wrapper">
   <form class="chatmsg" id="chat-form" action="/ask-chat" method="POST">
-    <textarea id="userMessage" name="userMessage" placeholder="" required></textarea>
+    <textarea id="userMessage" name="userMessage" placeholder="Write message..." required></textarea>
     <button type="submit">Send</button>
   </form>
-<form action="/clear-chat" method="POST" style="margin-top: 20px;">
-  <button type="submit">Clear chat 🗑</button>
-</form>
+  <form action="/clear-chat" method="POST">
+    <button type="submit" class="clear-button">Clean chat</button>
+  </form>
+</div>
+<!-- CHAT FORM WRAPPER END -->
+
+
 
   <script>
 
@@ -199,6 +275,13 @@
         form.submit();
       }
     });
+
+  function scrollToBottom() {
+    const chatHistory = document.getElementById('chat-history');
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+  }
+
+  window.onload = scrollToBottom;
 
   // Theme logic
   function setTheme(theme) {
