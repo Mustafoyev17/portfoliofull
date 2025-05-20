@@ -45,7 +45,7 @@ app.use(authRoutes);
 // Bosh sahifa
 app.get('/', (req, res) => {
   const sent = req.query.sent === 'true';
-  res.render('index', { sent, aiResponse: null });
+  res.render('home', { sent, aiResponse: null });
 });
 
 // 🔥 Chat sahifasi (GET - barcha yozishmalar bilan)
