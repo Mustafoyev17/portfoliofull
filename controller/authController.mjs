@@ -1,5 +1,8 @@
 import User from '../models/User.mjs';
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';// authController.mjs
+import { Chat } from '../models/Chat.mjs';
+
+
 
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
@@ -94,6 +97,20 @@ export const pricing_get = (req, res) => {
 };
 export const pricing_post = (req, res) => {
     res.render('pricing');
+};
+// Misol uchun
+export const chatbot_get = async (req, res) => {
+  try {
+    const messages = await Chat.find().sort({ createdAt: 1 }); // chatModel'dan xabarlarni olish
+    res.render('chatbot', { messages, aiResponse: null }); // EJS faylga `messages` yuborilyapti
+  } catch (error) {
+    console.error("❌ Chatbot sahifasini yuklashda xatolik:", error);
+    res.render('chatbot', { messages: [], aiResponse: null }); // Fallback bo‘lishi uchun bo‘sh massiv yuboramiz
+  }
+};
+
+export const chatbot_post = (req, res) => {
+    res.render('chatbot');
 };
 
 export const glovery_get = (req, res) => {

@@ -5,19 +5,26 @@ import cookieParser from 'cookie-parser';
 import nodemailer from 'nodemailer';
 import authRoutes from './routes/authRoutes.mjs';
 import { requireAuth } from './middleware/authMiddleware.mjs';
+import { Chat } from './models/Chat.mjs';
+import { OpenAI } from 'openai';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { systemPrompt } from './system.mjs';
 
 dotenv.config();
 const app = express();
 
-// Fayl yo'llari (EJS uchun)
+// Fayl yo‘llari
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// MongoDB URI
-const dbURI = process.env.MONGO_URI;
+// MongoDB ulanish
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => console.log("✅ MongoDB ulandi"))
+  .catch(err => console.error("❌ MongoDB xatolik:", err));
 
 // Middleware
 app.use(express.static('public'));
@@ -29,65 +36,107 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// MongoDB ulanish
-mongoose.connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log(" MongoDB connected ✅"))
-.catch((err) => console.log("MongoDB error ❌ ", err));
+// OpenAI ulanish
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Routes
+// Auth routes
 app.use(authRoutes);
 
-// GET /career sahifa
+// Bosh sahifa
 app.get('/', (req, res) => {
-    const sent = req.query.sent === 'true';
-    res.render('', { sent });
+  const sent = req.query.sent === 'true';
+  res.render('index', { sent, aiResponse: null });
 });
 
-// POST /send-message => Email yuborish
-app.post('/send-message', async (req, res) => {
-    const { name, email, phone, message } = req.body;
+// 🔥 Chat sahifasi (GET - barcha yozishmalar bilan)
+app.get('/chatbot', async (req, res) => {
+  try {
+    const messages = await Chat.find().sort({ createdAt: 1 });
+    res.render('chatbot', { messages, aiResponse: null });
+  } catch (error) {
+    console.error("❌ Chatni yuklashda xatolik:", error);
+    res.render('chatbot', { messages: [], aiResponse: null });
+  }
+});
 
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_PASS
-        }
+// 📩 POST - Foydalanuvchi xabarini yuborish va AI javobini olish
+app.post('/ask-chat', async (req, res) => {
+  const { userMessage } = req.body;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        systemPrompt,
+        { role: "user", content: userMessage }
+      ],
     });
 
-    const mailOptions = {
-        from: "Everest Evolution",
-        to: process.env.GMAIL_USER,
-        subject: 'New message from User',
-        html: `
-            <h1>New message:</h1>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone number:</strong> ${phone}</p>
-            <p><strong>Message:</strong> ${message}</p>
-        `
-    };
+    const aiReply = completion.choices[0].message.content;
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('Message send successfully ✅');
-        res.redirect(req.headers.referer);
-    } catch (err) {
-        console.error('Emailda xatolik:', err);
-        res.redirect(req.headers.referer);
+    const newChat = new Chat({ user: userMessage, ai: aiReply });
+    await newChat.save();
+
+    const messages = await Chat.find().sort({ createdAt: 1 });
+    res.render('chatbot', { messages, aiResponse: aiReply });
+  } catch (error) {
+    console.error("ChatGPT xatosi:", error);
+    res.render('chatbot', { messages: [], aiResponse: "AI bilan bog‘lanishda xatolik yuz berdi." });
+  }
+});
+
+// 🧹 POST - Barcha chat yozuvlarini tozalash
+app.post('/clear-chat', async (req, res) => {
+  try {
+    await Chat.deleteMany({});
+    res.redirect('/chatbot');
+  } catch (error) {
+    console.error("Yozishmalarni o‘chirishda xatolik:", error);
+    res.redirect('/chatbot');
+  }
+});
+
+// 📩 E-mail orqali xabar yuborish
+app.post('/send-message', async (req, res) => {
+  const { name, email, phone, message } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS
     }
+  });
+
+  const mailOptions = {
+    from: "Everest Evolution",
+    to: process.env.GMAIL_USER,
+    subject: 'New message from User',
+    html: `
+      <h1>New message:</h1>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.redirect(req.headers.referer);
+  } catch (err) {
+    console.error('Email xatosi:', err);
+    res.redirect(req.headers.referer);
+  }
 });
 
-// Bosh sahifa (auth'dan keyin)
+// Foydalanuvchi kirgandan keyingi sahifa
 app.get('/home', requireAuth, (req, res) => {
-    res.render('home');
+  res.render('home');
 });
 
-// Port
+// 🚀 Serverni ishga tushurish
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server ${PORT}-portda ishga tushdi`);
 });
