@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/css/styles.css">
+    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script defer src="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/astonish.js"></script>
+    <script defer src="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/menu.js"></script>
+    <script defer src="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/nav.js"></script>
+    <script defer src="https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/scroll.js"></script>
   <title>Chatbot - Everest Evolution</title>
   <style>
-body {
-  margin: 0;
-  padding: 0;
-  overflow-y: scroll;
-  font-family: sans-serif;
-}
 
     :root {
       --bg-color: #ffffff;
@@ -36,7 +38,7 @@ body {
       --card-bg: #1f1f1f;
       --border-color: #444; 
       --color-black: white;
-            --card-shadow: rgb(200, 200, 200, 0.1);
+      --card-shadow: rgb(200, 200, 200, 0.1);
     }
 
     body {
@@ -54,8 +56,6 @@ body {
     }
 
 #chat-history {
-  max-height: 70vh;
-  overflow-y: auto;
   padding-bottom: 160px;
 }
 
@@ -123,7 +123,7 @@ body {
 
     .theme-toggle {
       position: fixed;
-      top: 30px;
+      top: 12px;
       right: 20px;
       background: none;
       border: none;
@@ -185,8 +185,8 @@ body {
       
     .theme-toggle {
       position: fixed;
-      top: 86px;
-      right: 23px;
+      top: 84px;
+      right: 28px;
       background: none;
       border: none;
       cursor: pointer;
@@ -210,7 +210,7 @@ body {
 
     <nav class="main-nav" id="main-nav">
         <div class="content-wrapper-sm">
-         <a href="/pricing" class="navbar-brand"><span class="everest">EVEREST </span><span class="evolution">EVOLUTION</span></a>
+         <a href="/pricing" class="navbar-brand"><span class="everest">EVEREST </span><span class="evolution">EVOLUTION</span> <span class="everest">CHATBOT</span></a>
          <div id="menu-button">
           <div class="bar1"></div>
           <div class="bar2"></div>
@@ -221,16 +221,18 @@ body {
           <li><a style="color: rgb(255, 150, 0); font-family: bold;" href="/career">CAREERS</a></li>
           <li><a style="color: rgb(255, 150, 0); font-family: bold;" href="/portfolio">PORTFOLIO</a></li>
           <li><a style="color: rgb(255, 150, 0); font-family: bold;" href="/glovery">GLOVERY</a></li>
-         </ul>
-          <button class="theme-toggle" onclick="toggleTheme()" title="Tungi/Kunduzgi rejim">
+
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Tungi/Kunduzgi rejim">
             <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M12 3a9 9 0 1 0 9 9A9.01 9.01 0 0 0 12 3zm0 16a7 7 0 1 1 7-7 7.01 7.01 0 0 1-7 7z"/>
             </svg>
         </button>
+         </ul>
+
         </div>
        </nav>
 
-  <h1 class="CHATGPTtext">E•E Gpt bilan suhbat</h1>
+  <h1 class="CHATGPTtext">Chatting with E•E Gpt</h1>
 
 <div class="ai-response" id="chat-history" style="display: flex; justify-content: center; align-items: center; flex-direction: column; max-width: 750px;">
   <% if (messages && messages.length > 0) { %>

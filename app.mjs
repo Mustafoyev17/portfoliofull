@@ -48,6 +48,11 @@ app.get('/', (req, res) => {
   res.render('home', { sent, aiResponse: null });
 });
 
+app.get("/signup", (req, res) => {
+  res.render("signup"); // Bu "views/Signup.ejs" faylini qidiradi
+});
+
+
 // 🔥 Chat sahifasi (GET - barcha yozishmalar bilan)
 app.get('/chatbot', async (req, res) => {
   try {
