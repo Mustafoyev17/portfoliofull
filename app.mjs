@@ -69,7 +69,7 @@ app.post('/ask-chat', async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-3.5-turbo",
       messages: [
         systemPrompt,
         { role: "user", content: userMessage }
