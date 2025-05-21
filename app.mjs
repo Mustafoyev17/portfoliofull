@@ -135,7 +135,7 @@ app.post('/send-message', async (req, res) => {
   }
 });
 
-app.get('/home', requireAuth, (req, res) => {
+app.get('/', requireAuth, (req, res) => {
   res.render('home');
 });
 
