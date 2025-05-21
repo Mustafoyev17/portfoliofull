@@ -59,7 +59,11 @@ app.get('/chatbot', async (req, res) => {
     res.render('chatbot', { messages, aiResponse: null });
   } catch (error) {
     console.error("Error loading chat", error);
-    res.render('chatbot', { messages: [], aiResponse: null });
+    res.render('chatbot', {
+  messages: messages,
+  newMessage: messages[messages.length - 1] // oxirgi xabar
+});
+
   }
 });
 

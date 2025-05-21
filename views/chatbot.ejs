@@ -189,8 +189,8 @@
       border-radius: 12px;
       box-shadow: 0 4px 8px var(--card-shadow);
       border: none;
-
     }
+
     @media (max-width: 750px) {
       
     .theme-toggle {
@@ -212,13 +212,12 @@
   </style>
 </head>
 <script>
-  // Scroll to bottom function
+  
   function scrollToBottom() {
     const chatHistory = document.getElementById('chat-history');
     chatHistory.scrollTop = chatHistory.scrollHeight;
   }
 
-  // Har safar sahifa yuklanganda yoki yangi xabar kelganda chaqiriladi
   window.onload = scrollToBottom;
 </script>
 
@@ -264,16 +263,21 @@
   <h1 class="CHATGPTtext">Chatting with E•E Gpt</h1>
 
 <div class="ai-response" id="chat-history" style="display: flex; justify-content: center; align-items: center; flex-direction: column; max-width: 750px;">
-  <% if (messages && messages.length > 0) { %>
-    <% messages.forEach(msg => { %>
-      <div style="margin-bottom: 10px; background: var(--card-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px var(--card-shadow); width: 100%;">
-        <p><strong>👤</strong><%= msg.user %></p><br>
-        <p><strong>🤖</strong><%= msg.ai %></p>
-      </div>
-    <% }) %>
-  <% } else { %>
-    <p><h4>No message yet</h4></p>
-  <% } %>
+<% if (messages && messages.length > 0) { %>
+  <% messages.forEach((msg, index) => { %>
+    <div class="chat-message" style="margin-bottom: 10px; background: var(--card-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px var(--card-shadow); width: 100%;">
+      <p><strong>👤</strong> <%= msg.user %></p><br>
+      <p><strong>🤖</strong>
+        <% if (index === messages.length - 1) { %>
+          <span class="typing-text" data-text="<%= msg.ai %>"></span>
+        <% } else { %>
+          <%= msg.ai %>
+        <% } %>
+      </p>
+    </div>
+  <% }) %>
+<% } %>
+
 </div>
 
 <!-- CHAT FORM WRAPPER START -->
@@ -283,11 +287,29 @@
     <button type="submit">Send</button>
   </form>
 </div>
-<!-- CHAT FORM WRAPPER END -->
-
-
 
   <script>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const typingSpan = document.querySelector('.typing-text');
+    if (!typingSpan) return;
+
+    const fullText = typingSpan.getAttribute('data-text');
+    typingSpan.textContent = '';
+
+    let index = 0;
+
+    function type() {
+      if (index < fullText.length) {
+        typingSpan.textContent += fullText.charAt(index);
+        index++;
+        setTimeout(type, 6);
+      }
+    }
+
+    type();
+  });
+
   const form = document.getElementById('chat-history'); // form ID
   const textarea = document.getElementById('userMessage');
 
@@ -327,6 +349,13 @@
 
   // Sahifa yuklanganda avtomatik pastga tushirish
   window.onload = scrollToBottom;
+
+    textarea.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        form.submit();
+      }
+    });
 
   // Theme logic
   function setTheme(theme) {
