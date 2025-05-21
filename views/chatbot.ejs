@@ -244,7 +244,7 @@
   <% if (messages && messages.length > 0) { %>
     <% messages.forEach(msg => { %>
       <div style="margin-bottom: 10px; background: var(--card-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px var(--card-shadow); width: 100%;">
-        <p style="display: flex; justify-content: end;"><strong>👤</strong><%= msg.user %></p><br>
+        <p><strong>👤</strong><%= msg.user %></p><br>
         <p><strong>🤖</strong><%= msg.ai %></p>
       </div>
     <% }) %>
