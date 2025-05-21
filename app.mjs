@@ -14,17 +14,16 @@ import { systemPrompt } from './system.mjs';
 
 dotenv.config();
 const app = express();
+const MONGO_URI = process.env.MONGO_URI;
 
 // Fayl yo‘llari
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// MongoDB ulanish
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log("MongoDB connected ✅"))
-  .catch(err => console.error("❌ MongoDB error", err));
+mongoose.set('strictQuery', true);
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('MongoDB connected successfully ✅'))
+  .catch(err => console.error('MongoDB connection error ❌', err));
 
 // Middleware
 app.use(express.static('public'));
