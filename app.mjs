@@ -32,8 +32,8 @@ app.use(bp.json());
 app.use(cookieParser());
 
 // View engine
-app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // OpenAI ulanish
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -69,7 +69,7 @@ app.post('/ask-chat', async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4',
       messages: [
         systemPrompt,
         { role: "user", content: userMessage }
