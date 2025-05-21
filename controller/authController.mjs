@@ -109,8 +109,18 @@ export const chatbot_get = async (req, res) => {
   }
 };
 
-export const chatbot_post = (req, res) => {
-    res.render('chatbot');
+export const chatbot_post = async (req, res) => {
+  try {
+    const messages = await MessageModel.find({ userId: req.user.id }); // yoki kerakli query
+    
+    res.render('chatbot', {
+      messages, // ← bu joy muhim
+      user: req.user
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
 };
 
 export const glovery_get = (req, res) => {
