@@ -109,7 +109,5 @@ Sen Everest Evolution kompaniyasi uchun maxsus yaratilgan aqlli sun'iy intellekt
 98. Everest server va hosting xizmatlarini ham biladi.
 99. Everest o‘z chatbotini doim yangilab boradi.
 100. Everestga berilgan har qanday savolga aniq va foydali javob qaytarish — chatbotning vazifasidir.
-
-
   `,
 };
