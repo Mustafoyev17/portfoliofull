@@ -269,11 +269,11 @@ footer{
 <% if (messages && messages.length > 0) { %>
   <% messages.forEach((msg, index) => { %>
     <div class="chat-message" style="margin-bottom: 10px; background: var(--card-bg); padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px var(--card-shadow); width: 100%;">
-      <p><strong>👤</strong> <%= msg.user %></p><br>
+      <p><strong>👤 </strong><%= msg.user %></p><br>
         <% if (index === messages.length - 1) { %>
-          <p>🤖<span class="typing-text" data-text="<%= msg.ai %>"></span></p>
+          <p>🤖 <span class="typing-text" data-text="<%= msg.ai %>"></span></p>
         <% } else { %>
-          
+
         <% } %>
     </div>
   <% }) %>
