@@ -58,16 +58,19 @@
     }
 
 #chat-history {
-  margin-bottom: 180px;
+  margin-bottom: 260px;
   overflow-y: auto;
 }
 
+footer{
+    margin-bottom: 160px;
+}
 
 .chat-input-wrapper {
   width: 100%;
-  height: 12%;
+  height: 0%;
   position: fixed;
-  padding: 10px 20px;
+  padding: 0px 20px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -284,9 +287,16 @@
   <form class="chatmsg" id="chat-form" action="/ask-chat" method="POST">
     <textarea id="userMessage" name="userMessage" placeholder="Write message..." required></textarea>
     <button type="submit">Send</button>
+
+   <footer>
+    <div class="content-wrapper-sm display-flex-between">
+     <small>Your copyright 2025. All rights reserved by Mustafoyev Jo'rabek</small>
+    </div>
+   </footer>
+
+
   </form>
 </div>
-
 
   <script>
 
