@@ -271,6 +271,7 @@
         <% if (index === messages.length - 1) { %>
           <span class="typing-text" data-text="<%= msg.ai %>"></span>
         <% } else { %>
+            <%= msg.ai %>
         <% } %>
     </div>
   <% }) %>
@@ -312,6 +313,17 @@
 
   const form = document.getElementById('chat-history'); // form ID
   const textarea = document.getElementById('userMessage');
+
+
+    const input = document.querySelector('userMessage');
+
+  input.addEventListener('focus', () => {
+    // Mobil klaviatura chiqqanda inputni tepaga olib chiqadi
+    setTimeout(() => {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300); // biroz kutamiz, klaviatura to‘liq ochilishi uchun
+  });
+
 
     textarea.addEventListener('keydown', function(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
